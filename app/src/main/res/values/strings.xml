@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">FoodWaste</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="map">MAP</string>
+    <string name="home">HOME</string>
+    <string name="profile">PROFILE</string>
+
+    <string name="description_home">At ReduceWaste.com, we believe in the power of collective action to tackle one of the most pressing issues of our time: food waste. Every year, billions of tons of food are wasted globally, contributing to environmental degradation, economic losses, and exacerbating issues of hunger and food insecurity.</string>
+</resources>

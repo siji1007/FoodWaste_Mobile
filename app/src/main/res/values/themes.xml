@@ -1,0 +1,9 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.FoodWaste" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+      <item name="colorPrimary">@color/main_color</item>
+    </style>
+
+    <style name="Theme.FoodWaste" parent="Base.Theme.FoodWaste" />
+</resources>
