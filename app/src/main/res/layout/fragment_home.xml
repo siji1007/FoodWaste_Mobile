@@ -17,9 +17,10 @@
             >
 
             <VideoView
+                android:id="@+id/videoView"
                 android:layout_width="match_parent"
                 android:layout_height="210dp"
-                android:background="@color/black"
+
                 />
 
             <LinearLayout
@@ -92,19 +93,21 @@
                             <ImageView
                                 android:layout_width="match_parent"
                                 android:layout_height="150dp"
-                                android:id="@+id/img_1"
+                                android:id="@+id/ImageNewsOne"
                                 android:src="@drawable/breaking_news"/>
 
                             <TextView
 
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="NEWS 1"
+                                android:text="LOADING"
                                 android:textAlignment="center"
                                 android:layout_gravity="center_horizontal"
                                 android:textColor="@color/white"
                                 android:textSize="15dp"
-                                android:id="@+id/FirstNews"
+                                tools:ignore="MissingConstraints"
+                                android:id="@+id/FirstNewsTitle"
+
                                 android:background="@color/main_color"/>
 
                         </LinearLayout>
@@ -128,19 +131,20 @@
                             <ImageView
                                 android:layout_width="match_parent"
                                 android:layout_height="150dp"
-                                android:id="@+id/img_2"
+                                android:id="@+id/ImageNewsTwo"
                                 android:src="@drawable/breaking_news"/>
 
                             <TextView
 
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="NEWS 2"
+                                android:text="LOADING"
                                 android:textAlignment="center"
                                 android:layout_gravity="center_horizontal"
                                 android:textColor="@color/white"
+                                tools:ignore="MissingConstraints"
                                 android:textSize="15dp"
-                                android:id="@+id/SecondNews"
+                                android:id="@+id/SecondNewsTitle"
                                 android:background="@color/main_color"/>
 
                         </LinearLayout>
@@ -163,19 +167,20 @@
                             <ImageView
                                 android:layout_width="match_parent"
                                 android:layout_height="150dp"
-                                android:id="@+id/img_3"
+                                android:id="@+id/ImageNewsThree"
                                 android:src="@drawable/breaking_news"/>
 
                             <TextView
 
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="NEWS 3"
+                                android:text="LOADING"
+                                tools:ignore="MissingConstraints"
                                 android:textAlignment="center"
                                 android:layout_gravity="center_horizontal"
                                 android:textColor="@color/white"
                                 android:textSize="15dp"
-                                android:id="@+id/ThirdNews"
+                                android:id="@+id/ThirdNewsTitle"
                                 android:background="@color/main_color"/>
 
                         </LinearLayout>

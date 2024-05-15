@@ -51,9 +51,13 @@ dependencies {
     val lottieVersion = "6.4.0" // Corrected variable name and added a proper version
     implementation("com.airbnb.android:lottie:$lottieVersion")
 
+    implementation("com.google.ai.client.generativeai:generativeai:0.2.0")
 
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.github.bumptech.glide:glide:4.11.0")
-    annotationProcessor ("com.github.bumptech.glide:compiler:4.11.0")
+    // Required for one-shot operations (to use `ListenableFuture` from Reactive Streams)
+    implementation("com.google.guava:guava:31.0.1-android")
+
+    // Required for streaming operations (to use `Publisher` from Guava Android)
+    implementation("org.reactivestreams:reactive-streams:1.0.4")
+
+    implementation("com.squareup.picasso:picasso:2.8")
 }
