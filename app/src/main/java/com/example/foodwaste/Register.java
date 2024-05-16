@@ -1,6 +1,7 @@
 package com.example.foodwaste;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -27,6 +28,7 @@ public class Register extends AppCompatActivity {
             public void onClick(View v) {
                 showSelectionDialog("Customer");
             }
+
         });
 
         vendorCard.setOnClickListener(new View.OnClickListener() {
@@ -50,6 +52,13 @@ public class Register extends AppCompatActivity {
         builder.setMessage("Do you want to register as " + type + "?");
 
         builder.setPositiveButton("Yes", (dialog, which) -> {
+
+
+            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("role", type);
+            editor.apply();
+
             // Navigate to MainActivity
             Intent intent = new Intent(Register.this, MainActivity.class);
             startActivity(intent);

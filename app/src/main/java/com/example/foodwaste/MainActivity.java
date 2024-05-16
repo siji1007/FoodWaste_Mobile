@@ -1,6 +1,9 @@
 package com.example.foodwaste;
 
+import android.net.Uri;
 import android.os.Bundle;
+import android.widget.VideoView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -8,7 +11,9 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.foodwaste.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
+    static String postUrl = "http://192:168:8:104:5000";
     ActivityMainBinding binding;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         replaceFragment(new HomeFragment());
+
+
 
         binding.bottomNavigationView.setOnItemSelectedListener(menuItem -> {
             int itemId = menuItem.getItemId();

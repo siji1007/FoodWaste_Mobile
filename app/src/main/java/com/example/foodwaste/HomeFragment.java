@@ -1,7 +1,11 @@
 package com.example.foodwaste;
 
+import static com.google.common.reflect.Reflection.getPackageName;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -12,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import androidx.fragment.app.Fragment;
 
@@ -33,12 +38,17 @@ public class HomeFragment extends Fragment {
     private String newsOneLink, newsTwoLink, newsThreeLink;
 
     private ImageView NewsOneImage, NewsTwoImage, NewsThreeImage;
+    private VideoView videoPlay;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        videoPlay = view.findViewById(R.id.videoView);
 
         newsOneTitle = view.findViewById(R.id.FirstNewsTitle);
         newsTwoTitle = view.findViewById(R.id.SecondNewsTitle);
@@ -77,9 +87,29 @@ public class HomeFragment extends Fragment {
                 displayNewsDescription(newsThreeTitle.getText().toString());
             }
         });
+        playVideo();
+
 
         return view;
     }
+
+    private void playVideo() {
+        String videoPath = "android.resource://" + requireContext().getPackageName() + "/" + R.raw.advertisement;
+        videoPlay.setVideoURI(Uri.parse(videoPath));
+        videoPlay.setOnPreparedListener(mp -> mp.setVolume(0f, 0f));
+        videoPlay.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                // Restart the video playback
+                videoPlay.start();
+            }
+        });
+        videoPlay.start();
+    }
+
+
+
+
 
     private void showToast(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
@@ -93,7 +123,7 @@ public class HomeFragment extends Fragment {
         // Generate content related to food waste news in the Philippines
         ListenableFuture<GenerateContentResponse> response = model.generateContent(
                 new Content.Builder()
-                        .addText("top 3 news about food waste in the Philippines. Sort by number")
+                        .addText("top 3 news about food waste in the Camarines Norte Philippines. Sort by number")
                         .build());
 
         // Handle the response

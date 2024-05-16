@@ -1,91 +1,242 @@
 package com.example.foodwaste;
 
+import static android.content.Context.LOCATION_SERVICE;
+
+import static androidx.core.content.ContextCompat.getSystemService;
+
 import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.os.Build;
+import android.graphics.Bitmap;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.GeolocationPermissions;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.example.foodwaste.R;
+import com.airbnb.lottie.LottieAnimationView;
 
+import org.osmdroid.api.IMapController;
+import org.osmdroid.config.Configuration;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.views.CustomZoomButtonsController;
+import org.osmdroid.views.MapView;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.overlay.compass.CompassOverlay;
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
+import org.osmdroid.views.overlay.Marker;
+
+import java.io.IOException;
+import java.text.BreakIterator;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class MapFragment extends Fragment {
 
-    private static final int REQUEST_LOCATION_PERMISSION = 1;
-    private WebView webView;
-    private WebViewClient webViewClient;
+    private static final int REQUEST_CAMERA_PERMISSION = 1;
+    private static final int REQUEST_IMAGE_CAPTURE = 2;
+    private static final int REQUEST_LOCATION_PERMISSION = 3;
 
-    private TextView StreetLocation;
+    private MapView mapView;
+    private Button uploadImageButton;
+    private MyLocationNewOverlay myLocationOverlay;
+    private View rootView;
 
-    @Nullable
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
-        webView = rootView.findViewById(R.id.webView);
 
-        setupWebView();
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        String role = sharedPreferences.getString("role", "Unknown");
+
+        TextView roleTextView = rootView.findViewById(R.id.role);
+        roleTextView.setText(role + " view");
+
+
+
+
+
+
+        // Initialize the MapView
+        Context ctx = requireContext().getApplicationContext();
+        Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
+        mapView = rootView.findViewById(R.id.mapview); // Assign the MapView to the class variable
+        mapView.setTileSource(TileSourceFactory.MAPNIK);
+        mapView.setBuiltInZoomControls(true); // Enable built-in zoom controls
+        mapView.setMultiTouchControls(true); // Enable multi-touch controls
+
+        // Initialize the MyLocationNewOverlay
+        myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(requireContext()), mapView);
+        myLocationOverlay.enableFollowLocation();
+        myLocationOverlay.enableMyLocation();
+        mapView.getOverlayManager().add(myLocationOverlay);
+
+        // Set the zoom level
+        IMapController mapController = mapView.getController();
+        mapController.setZoom(14.0); // Set the desired zoom level
+
+
+
+
+        // Request permissions if necessary
+        requestPermissionsIfNecessary(new String[]{Manifest.permission.ACCESS_FINE_LOCATION});
+
+        TextView navigateDescription = rootView.findViewById(R.id.NavigateDescription);
+        if ("Customer".equals(role)) {
+            Toast.makeText(getContext(), "This is the customer view", Toast.LENGTH_SHORT).show();
+            addMarker(14.134910, 122.924079);
+
+            addMarker(14.126303, 122.937971);
+
+            rootView.findViewById(R.id.mapDesign).setVisibility(View.VISIBLE);
+            rootView.findViewById(R.id.camera).setVisibility(View.GONE);
+            rootView.findViewById(R.id.descritionScan).setVisibility(View.GONE);
+
+
+            navigateDescription.setText("Time to navigate Vendors.");
+
+
+
+
+        }else if ("Vendor".equals(role)){
+            Toast.makeText(getContext(), "This is the vendor view", Toast.LENGTH_SHORT).show();
+
+            addMarker(14.134910, 122.924079);
+            addMarker(14.126303, 122.937971);
+
+
+            rootView.findViewById(R.id.mapDesign).setVisibility(View.GONE);
+            rootView.findViewById(R.id.camera).setVisibility(View.VISIBLE);
+            rootView.findViewById(R.id.descritionScan).setVisibility(View.VISIBLE);
+
+            navigateDescription.setText("Time to navigate Organizations.");
+
+
+            LottieAnimationView uploadImage = rootView.findViewById(R.id.camera);
+            uploadImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    requestCameraPermission();
+                }
+            });
+
+
+
+
+        }else if ("Organization".equals(role)){
+            Toast.makeText(getContext(), "This is the organization view", Toast.LENGTH_SHORT).show();
+
+            addMarker(14.134910, 122.924079);
+            addMarker(14.126303, 122.937971);
+
+            rootView.findViewById(R.id.mapDesign).setVisibility(View.VISIBLE);
+            rootView.findViewById(R.id.camera).setVisibility(View.GONE);
+            rootView.findViewById(R.id.descritionScan).setVisibility(View.GONE);
+
+            navigateDescription.setText("Time to navigate vendors.");
+
+
+        }else {
+            Toast.makeText(getContext(), "No selected role", Toast.LENGTH_SHORT).show();
+        }
+
+
+
+
         return rootView;
     }
 
-    private void setupWebView() {
-        WebSettings webSettings = webView.getSettings();
-        webSettings.setJavaScriptEnabled(true); // Enable JavaScript
 
-        webViewClient = new WebViewClient() {
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
 
-                // Request location permission if not granted
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                        ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
-                } else {
-                    // Enable geolocation permission
-                    webView.evaluateJavascript("javascript:navigator.geolocation.getCurrentPosition(function(position) {" +
-                            "var lat = position.coords.latitude;" +
-                            "var lon = position.coords.longitude;" +
-                            "window.location.href = 'https://www.google.com/maps?q=' + lat + ',' + lon;" +
-                            "});", null);
-                }
+    private void requestPermissionsIfNecessary(String[] permissions) {
+        ArrayList<String> permissionsToRequest = new ArrayList<>();
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(requireContext(), permission)
+                    != PackageManager.PERMISSION_GRANTED) {
+                permissionsToRequest.add(permission);
             }
-        };
-
-        webView.setWebViewClient(webViewClient);
-
-        webView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
-                callback.invoke(origin, true, false);
-            }
-        });
-
-        // Load Google Maps URL
-        webView.loadUrl("https://www.google.com/maps");
+        }
+        if (!permissionsToRequest.isEmpty()) {
+            ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    permissionsToRequest.toArray(new String[0]),
+                    REQUEST_CAMERA_PERMISSION);
+        }
     }
+
+    private void requestCameraPermission() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+        } else {
+            openCamera();
+        }
+    }
+
+    private void openCamera() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(requireActivity().getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_LOCATION_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted, reload the web view to trigger location fetching
-                webView.reload();
+                // Location permission granted, proceed to get the current location
+                // Zoom the map view
+                IMapController mapController = mapView.getController();
+                mapController.setZoom(16.0); // Set the desired zoom level
+            } else {
+                // Location permission denied, handle accordingly (e.g., show a message)
+                Toast.makeText(requireContext(), "Location permission denied", Toast.LENGTH_SHORT).show();
             }
         }
     }
-}
+
+
+
+
+
+
+    private void addMarker(double latitude, double longitude) {
+        GeoPoint point = new GeoPoint(latitude, longitude);
+        Marker marker = new Marker(mapView);
+        marker.setPosition(point);
+        marker.setIcon(getResources().getDrawable(R.drawable.pinlocation));
+        // Set the anchor to center
+        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
+        mapView.getOverlays().add(marker);
+        mapView.getController().setCenter(point);
+
+    }
+
+
+
+
+
+
+    }
+
+

@@ -16,7 +16,7 @@
 
         <com.airbnb.lottie.LottieAnimationView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="120dp"
             app:lottie_rawRes="@raw/signup"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
@@ -25,27 +25,28 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:background="@color/black"
+            android:background="@color/main_color"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="15dp"
             >
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="USERNAME"
-                android:textSize="20dp"
+                android:textSize="15sp"
                 android:textColor="@color/white"
-                android:textStyle="bold"
-                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 />
+
             <EditText
+                android:id="@+id/username"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColor="@color/white"
+                android:layout_marginStart="10dp"
                 android:gravity="bottom"
-                android:layout_marginLeft="10dp"
-                />
+                android:textColor="@color/white"
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -54,7 +55,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:background="@color/black"
+            android:background="@color/main_color"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
@@ -63,18 +64,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="PASSWORD"
-                android:textSize="20dp"
+                android:textSize="15sp"
                 android:textColor="@color/white"
-                android:textStyle="bold"
-                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 />
+
             <EditText
+                android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColor="@color/white"
+                android:layout_marginStart="10dp"
                 android:gravity="bottom"
-                android:layout_marginLeft="10dp"
-                />
+                android:textColor="@color/white" />
 
         </LinearLayout>
 
@@ -83,7 +84,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:background="@color/black"
+            android:background="@color/main_color"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
@@ -92,18 +93,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="FULLNAME"
-                android:textSize="20dp"
+                android:textSize="15sp"
                 android:textColor="@color/white"
-                android:textStyle="bold"
-                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 />
+
             <EditText
+                android:id="@+id/fullname"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColor="@color/white"
+                android:layout_marginStart="10dp"
                 android:gravity="bottom"
-                android:layout_marginLeft="10dp"
-                />
+                android:textColor="@color/white" />
 
         </LinearLayout>
 
@@ -111,7 +112,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:background="@color/black"
+            android:background="@color/main_color"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
@@ -120,24 +121,180 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="EMAIL"
-                android:textSize="20dp"
+                android:textSize="15sp"
                 android:textColor="@color/white"
-                android:textStyle="bold"
-                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 />
+
             <EditText
+                android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColor="@color/white"
+                android:layout_marginStart="10dp"
                 android:gravity="bottom"
-                android:layout_marginLeft="10dp"
-                />
+                android:textColor="@color/white" />
 
         </LinearLayout>
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/semi_white"
+            android:orientation="horizontal">
 
 
+            <LinearLayout
+                android:layout_width="160dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/main_color"
+                android:gravity="start">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:gravity="bottom"
+                    android:hint="Street"
+                    android:id="@+id/Street"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/semi_white" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/main_color"
+
+                >
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:gravity="bottom"
+                    android:hint="Municipality"
+                    android:id="@+id/Baranngay"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/semi_white" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:background="@color/semi_white"
+            android:paddingBottom="10dp"
+            android:orientation="horizontal">
+
+
+
+            <LinearLayout
+                android:layout_width="160dp"
+                android:layout_height="40dp"
+                android:background="@color/main_color"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                android:gravity="start"
+                >
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:gravity="bottom"
+                    android:hint="Province"
+                    android:id="@+id/Province"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/semi_white" />
+
+
+
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="160dp"
+                android:layout_height="40dp"
+                android:background="@color/main_color"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                android:gravity="start"
+                >
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:gravity="bottom"
+                    android:hint="Postal Code"
+                    android:id="@+id/Postal"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/semi_white" />
+
+
+
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            >
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Current location"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:id="@+id/CurrentLoc"
+                android:background="@drawable/btn_background"
+                />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:background="@color/black">
+
+                <org.osmdroid.views.MapView
+                    android:id="@+id/mapview"
+                    tilesource="Mapnik"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </FrameLayout>
+
+
+        </LinearLayout>
 
 
         <Spinner
@@ -145,8 +302,10 @@
             android:layout_height="wrap_content"
             android:id="@+id/spinner"
             android:accessibilityPaneTitle="ROLE"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:layout_gravity="center_horizontal"
+            android:drawSelectorOnTop = "true"
+            android:entries="@array/spinnerItems"
             />
 
 
@@ -155,6 +314,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:layout_gravity="bottom"
                 >
 
                 <Button
@@ -163,9 +323,9 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/btn_background"
                     android:gravity="center"
-                    android:text="SIGN UP"
+                    android:onClick="register"
 
-                    />
+                    android:text="SIGN UP" />
 
             </LinearLayout>
 
