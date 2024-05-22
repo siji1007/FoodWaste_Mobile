@@ -11,7 +11,8 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.foodwaste.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
-    static String postUrl = "http://192:168:8:104:5000";
+    static String postUrl = "http://192:168:100:198:5000";
+
     ActivityMainBinding binding;
 
 

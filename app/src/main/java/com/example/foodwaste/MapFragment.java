@@ -1,5 +1,6 @@
 package com.example.foodwaste;
 
+import static android.content.ContentValues.TAG;
 import static android.content.Context.LOCATION_SERVICE;
 
 import static androidx.core.content.ContextCompat.getSystemService;
@@ -16,8 +17,10 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +36,8 @@ import androidx.fragment.app.Fragment;
 
 import com.airbnb.lottie.LottieAnimationView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -44,11 +49,19 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 import org.osmdroid.views.overlay.Marker;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 
 public class MapFragment extends Fragment {
 
@@ -71,10 +84,6 @@ public class MapFragment extends Fragment {
 
         TextView roleTextView = rootView.findViewById(R.id.role);
         roleTextView.setText(role + " view");
-
-
-
-
 
 
         // Initialize the MapView
@@ -104,6 +113,8 @@ public class MapFragment extends Fragment {
         TextView navigateDescription = rootView.findViewById(R.id.NavigateDescription);
         if ("Customer".equals(role)) {
             Toast.makeText(getContext(), "This is the customer view", Toast.LENGTH_SHORT).show();
+
+
             addMarker(14.134910, 122.924079);
 
             addMarker(14.126303, 122.937971);
@@ -116,7 +127,9 @@ public class MapFragment extends Fragment {
             navigateDescription.setText("Time to navigate Vendors.");
 
 
+            //LATITUDE AND LONG OF VENDORS HERE
 
+            fetchAndDisplayData("/vendor-details");
 
         }else if ("Vendor".equals(role)){
             Toast.makeText(getContext(), "This is the vendor view", Toast.LENGTH_SHORT).show();
@@ -143,6 +156,14 @@ public class MapFragment extends Fragment {
 
 
 
+
+            //LATITUDE AND LONG OF ORGANIZATIONS HERE
+
+            fetchAndDisplayData("/organization-details");
+
+
+
+
         }else if ("Organization".equals(role)){
             Toast.makeText(getContext(), "This is the organization view", Toast.LENGTH_SHORT).show();
 
@@ -159,12 +180,12 @@ public class MapFragment extends Fragment {
         }else {
             Toast.makeText(getContext(), "No selected role", Toast.LENGTH_SHORT).show();
         }
-
-
-
+        //LATITUDE AND LONG OF VENDORS HERE
+        fetchAndDisplayData("/vendor-details");
 
         return rootView;
     }
+
 
 
 
@@ -188,9 +209,10 @@ public class MapFragment extends Fragment {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
         } else {
-            openCamera();
+           openCamera();
         }
     }
+
 
     private void openCamera() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -230,6 +252,28 @@ public class MapFragment extends Fragment {
         mapView.getOverlays().add(marker);
         mapView.getController().setCenter(point);
 
+    }
+
+    private void fetchAndDisplayData(String endpoint) {
+        NetworkUtils.fetchData(endpoint, new NetworkUtils.DataCallback() {
+            @Override
+            public void onSuccess(JSONArray data) {
+                // Handle the JSON response here
+                for (int i = 0; i < data.length(); i++) {
+                    try {
+                        Toast.makeText(requireContext(),"Data from " + endpoint + ": " + data.getJSONObject(i).toString(), Toast.LENGTH_LONG).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                // Handle the error here
+                Log.e(TAG, "Failed to fetch data from " + endpoint, e);
+            }
+        });
     }
 
 
